@@ -1,0 +1,16 @@
+version: "3.3"
+
+services:
+    lambda:
+        build:
+            context: .
+            dockerfile: Dockerfile
+            args:
+                BASENAME: lambci/lambda:build-python3.7
+        image: cirrusgeo/run-lambda:latest
+    geolambda:
+        build:
+            context: .
+            args:
+                BASEIMAGE: developmentseed/geolambda:1.2.0-python
+        image: cirrusgeo/run-geolambda:latest

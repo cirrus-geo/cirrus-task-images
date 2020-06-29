@@ -1,58 +1,37 @@
-# Cirrus Job Images
+# Cirrus Task Images
 
-This repository containd Docker files for creating Docker images used in Cirrus.
+This repository contains Docker files for creating Docker images used for running Cirrus tasks in Batch. There are two general Docker images that are always available in Cirrus: `run-lambda` and `run-geolambda`. These images can be used to run *any* Lambda function as an AWS Batch job instead.
 
+This repository exists to maintain public built Docker images that are referenced from a Cirrus deployment. See the Cirrus documentation for detailed usage of these images with Cirrus, a brief overview is provided below.
 
+## Built Docker Images
 
-
-# GeoLambda Batch Job
-
-This directory stores the Dockerfile and script for running a deployed Lambda function in a container. This can be useful to run jobs that don't fit into the requirements of a Lambda, such as taking too long or requiring too much storage space. When built, the Docker image can be run like an executable, passing in the Lambda ARN and an S3 URL to a JSON file.
-
-When run, the container will fetch the code for the Lambda function, along with the JSON file. It will then run the function `lambda_handler.lambda_function` (currently not adjustable) with the JSON file as the event payload, and upload the resulting JSON output back to s3.
-
-The Docker image created is based off [GeoLambda (Python)](https://github.com/developmentseed/geolambda), so contains common native geospatial libraries lile *PROJ* and *GDAL*, along with common geospatial Python libraries like *rasterio* and *pyproj*
+| Image                   | Description |
+| ----------------------- | ----------- |
+| cirrusgeo/run-lambda    | Run Lambda code in a Docker container |
+| cirrusgeo/run-geolambda | Run Lambda code in a Docker container with geospatial libraries |
 
 
-## Versions
+## Usage
 
+These Cirrus images are usually used by creating a Batch JobDefinition which is referenced from a Task in a Cirrus workflow. However as Docker images, they can be used locally or on other servers or clusters as well.
+The built images are stored in Docker Hub in the [`cirrusgeo` organization](https://hub.docker.com/orgs/cirrusgeo/repositories).
 
+In the case of `run-lambda` and `run-geolambda`, when used as a Task in Cirrus the Lambda Function ARN is provided as part of the JobDefinition (see Cirrus example workflows), and the payload will be automatically handed to the Batch job. 
 
-## TODO
+They will also be used by calling the `cirruslib.utils.submit_as_batch_job` function from within a single Lambda function (such as a Cirrus feeder). This allows a Lambda function to be able to call it's own code, but run as a Batch process instead, such as when the running time is expected to be too long to run as a Lambda When started, the Docker container fetches the code for the Lambda function, along with the JSON file payload stored on s3. The function `lambda_handler.lambda_function` is run with the JSON file as the event payload, and the returned result is uploaded back to s3 with the same URL.
 
-- Put into separate repo: geolambda-batch, add license
-- deploy to new repo
-- Configurable name of lambda handler
-- option to pass in JSON directly rather than fetch from s3
-- make uploading JSON output to s3 optional
-- add tests
-- put run-batch in /usr/local/lib so can be called without qualifying directory (this involves using importlib in the code to properly import lambda handler which will now be in a different directory that the executable)
+### run-lambda
 
+The `run-lambda` image will run the code from any Lambda function you have access to. The Docker image is based on a basic Lambda runtime for Python and will have the same libraries as a Lambda does.
 
+```
+$ docker run -it cirrusgeo/run-lambda run <LambdaFunctionArn> <S3URLtoPayload>
+```
 
+### run-geolambda
 
-# Lambda Batch Job
-
-This directory stores the Dockerfile and script for running a deployed Lambda function in a container. This can be useful to run jobs that don't fit into the requirements of a Lambda, such as taking too long or requiring too much storage space. When built, the Docker image can be run like an executable, passing in the Lambda ARN and an S3 URL to a JSON file.
-
-When run, the container will fetch the code for the Lambda function, along with the JSON file. It will then run the function `lambda_handler.lambda_function` (currently not adjustable) with the JSON file as the event payload, and upload the resulting JSON output back to s3.
-
-## Versions
-
-
-
-
-## TODO
-
-- Put into separate repo: geolambda-batch, add license
-- deploy to new repo
-- Configurable name of lambda handler
-- option to pass in JSON directly rather than fetch from s3
-- make uploading JSON output to s3 optional
-- add tests
-- put run-batch in /usr/local/lib so can be called without qualifying directory (this involves using importlib in the code to properly import lambda handler which will now be in a different directory that the executable)
-
-
+The `run-geolambda` image will run the code from any Lambda function you have access to, just as `run-lambda`. Instead of a basic Lambda image, the [GeoLambda (Python)](https://github.com/developmentseed/geolambda) image is used. If the Lambda that is to be run uses GeoLambda layers, or requires the same geospatial libraries that are available in GeoLambda, then use this image. GeoLambda includes native geospatial libraries lile *PROJ* and *GDAL*, along with common geospatial Python libraries like *rasterio* and *pyproj*
 
 ## About
 

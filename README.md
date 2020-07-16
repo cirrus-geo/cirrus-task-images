@@ -11,7 +11,6 @@ This repository exists to maintain public built Docker images that are reference
 | cirrusgeo/run-lambda    | Run Lambda code in a Docker container |
 | cirrusgeo/run-geolambda | Run Lambda code in a Docker container with geospatial libraries |
 
-
 ## Usage
 
 These Cirrus images are usually used by creating a Batch JobDefinition which is referenced from a Task in a Cirrus workflow. However as Docker images, they can be used locally or on other servers or clusters as well.
@@ -29,9 +28,25 @@ The `run-lambda` image will run the code from any Lambda function you have acces
 $ docker run -it cirrusgeo/run-lambda run <LambdaFunctionArn> <S3URLtoPayload>
 ```
 
+#### Versions
+
+The different versions of `run-lambda` just mean different base images were used to create the Docker image.
+
+| Version     | Base Image  |
+| ----------- | ----------- |
+| 0.1.0       | lambci/lambda:build-python3.7 |
+
 ### run-geolambda
 
 The `run-geolambda` image will run the code from any Lambda function you have access to, just as `run-lambda`. Instead of a basic Lambda image, the [GeoLambda (Python)](https://github.com/developmentseed/geolambda) image is used. If the Lambda that is to be run uses GeoLambda layers, or requires the same geospatial libraries that are available in GeoLambda, then use this image. GeoLambda includes native geospatial libraries lile *PROJ* and *GDAL*, along with common geospatial Python libraries like *rasterio* and *pyproj*
+
+#### Versions
+
+The different versions of `run-geolambda` just mean different base images were used to create the Docker image.
+
+| Version     | Base Image  |
+| ----------- | ----------- |
+| 0.1.0       | developmentseed/geolambda:1.2.0-python |
 
 ## About
 

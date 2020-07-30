@@ -60,5 +60,7 @@ if __name__ == "__main__":
     logger.debug(f"Running lambda_handler with payload from {args.url}")
     response = lambda_handler(payload)
 
-    s3().upload_json(payload, args.url)
+    #url = args.url.replace('.json', '_out.json')
+
+    s3().upload_json(response, args.url)
     logger.debug(f"Completed, copied output back to {args.url}")

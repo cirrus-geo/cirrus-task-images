@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [v0.1.1] - 2020-07-30
+
+## Fixed
+- Explicit response from lambda handler copied back to s3, not modified input payload
+
 ## [v0.1.0] - 2020-07-01
 
 Initial release

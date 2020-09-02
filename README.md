@@ -32,9 +32,9 @@ $ docker run -it cirrusgeo/run-lambda run <LambdaFunctionArn> <S3URLtoPayload>
 
 The different versions of `run-lambda` just mean different base images were used to create the Docker image.
 
-| Version     | Base Image  |
-| ----------- | ----------- |
-| 0.1.1       | lambci/lambda:build-python3.7 |
+| Versions      | Base Image  |
+| ------------- | ----------- |
+| 0.1.1 - 0.2.0 | lambci/lambda:build-python3.7 |
 
 ### run-geolambda
 
@@ -44,10 +44,10 @@ The `run-geolambda` image will run the code from any Lambda function you have ac
 
 The different versions of `run-geolambda` just mean different base images were used to create the Docker image.
 
-| Version     | Base Image  |
-| ----------- | ----------- |
-| 0.1.1       | developmentseed/geolambda:1.2.0-python |
+| Versions      | Base Image  |
+| ------------- | ----------- |
+| 0.1.1 - 0.2.0 | developmentseed/geolambda:1.2.0-python |
 
 ## About
 
-Cirrus is an open-source pipeline for processing geospatial data in AWS. Cirrus was developed by [Element 84](https://element84.com/) originally under a [NASA Access project].
+Cirrus is an open-source pipeline for processing geospatial data in AWS. Cirrus was developed by [Element 84](https://element84.com/) originally under a [NASA Access project]. It is released under the Apache License.

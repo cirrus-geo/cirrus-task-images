@@ -6,7 +6,7 @@ services:
             context: .
             dockerfile: Dockerfile
             args:
-                BASENAME: lambci/lambda:build-python3.7
+                BASEIMAGE: lambci/lambda:build-python3.7
         image: cirrusgeo/run-lambda:latest
     geolambda:
         build:

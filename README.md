@@ -34,7 +34,7 @@ The different versions of `run-lambda` just mean different base images were used
 
 | Versions      | Base Image  |
 | ------------- | ----------- |
-| 0.1.1 - 0.2.0 | lambci/lambda:build-python3.7 |
+| 0.1.x - 0.2.x | lambci/lambda:build-python3.7 |
 
 ### run-geolambda
 
@@ -46,7 +46,7 @@ The different versions of `run-geolambda` just mean different base images were u
 
 | Versions      | Base Image  |
 | ------------- | ----------- |
-| 0.1.1 - 0.2.0 | developmentseed/geolambda:1.2.0-python |
+| 0.1.x - 0.2.x | developmentseed/geolambda:1.2.0-python |
 
 ## About
 

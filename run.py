@@ -1,19 +1,19 @@
 #!/usr/bin/env python
 
 import argparse
+import os
 import requests
+from json import dumps
+from logging import getLogger, StreamHandler
+from sys import argv
 
 from boto3 import client
 from boto3utils import s3
-from json import dumps
-from logging import getLogger, StreamHandler
-from os import getenv
-from sys import argv
 from zipfile import ZipFile
 
 # configure logger - CRITICAL, ERROR, WARNING, INFO, DEBUG
 logger = getLogger(__name__)
-logger.setLevel(getenv('CIRRUS_LOG_LEVEL', 'DEBUG'))
+logger.setLevel(os.getenv('CIRRUS_LOG_LEVEL', 'DEBUG'))
 logger.addHandler(StreamHandler())
 getLogger("boto3utils").propagate = True
 
@@ -49,17 +49,29 @@ if __name__ == "__main__":
 
     # download and unzip lambda
     fetch_lambda_code(args.lambda_function)
-    logger.debug("Importing lambda_handler.lambda_function from fetched Lambda")
-    from lambda_function import lambda_handler
+
+    # get list of files
+    filenames = os.listdir()
+
+    if 'task.py' in filenames:
+        msg = 'Importing handler from task.py'
+        from task import handler
+    elif 'feeder.py' in filenames:
+        msg = 'Importing handler from feeder.py'
+        from feeder import handler
+    else:
+        msg = 'Importing lambda_handler from lambda_function.py as handler'
+        from lambda_function import lambda_handler as handler
+
+    logger.info(msg)
 
     # fetch event payload
     payload = s3().read_json(args.url)
-    logger.debug(f"Payload: {dumps(payload)}")
-   
-    # run handler with payload
-    logger.debug(f"Running lambda_handler with payload from {args.url}")
-    response = lambda_handler(payload)
 
+    # run handler with payload
+    response = handler(payload)
+
+    # write back output
     url = args.url.replace('.json', '_out.json')
 
     s3().upload_json(response, url)

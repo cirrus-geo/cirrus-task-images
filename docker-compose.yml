@@ -14,3 +14,11 @@ services:
             args:
                 BASEIMAGE: developmentseed/geolambda:1.2.0-python
         image: cirrusgeo/run-geolambda:latest
+    geodatalambda:
+        build:
+            context: .
+            dockerfile: ./data_geo/Dockerfile
+            args:
+                BASEIMAGE: developmentseed/geolambda:1.2.0-python
+        image: cirrusgeo/run-geodatalambda:latest
+
